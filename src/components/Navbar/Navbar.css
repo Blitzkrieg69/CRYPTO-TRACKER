@@ -1,0 +1,51 @@
+.navbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 10%;
+    color: white;
+}
+
+.container:hover .navbar {
+    box-shadow: 0 3px 2px rgb(1, 255, 31);
+}
+
+
+.navbar .logo{
+    width: max(12vw, 120px);
+    font-family: cursive;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.logo:hover{
+    color: rgb(1, 255, 31);
+}
+
+.nav-right{
+    display: flex;
+    align-items: center;
+    gap: max(1vw, 12px);
+}
+
+.navbar select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 3px solid rgb(25, 254, 0);
+    background: transparent;
+    color: white;
+    outline: none; /* Removes default focus outline */
+    transition: border-color 0.3s ease; /* Smooth transition for the border */
+}
+
+.navbar select:focus,
+.navbar select:active {
+    border-color: rgb(25, 254, 0); /* Maintain the same border color on focus */
+    outline: none; /* Ensures no outline is shown */
+    box-shadow: none; /* Prevents any shadow from appearing */
+}
+
+.navbar option {
+    background: #3c3c3c;
+    color: white;
+}
