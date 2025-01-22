@@ -18,6 +18,8 @@
     width: 75%;
     color: #e3e3e3;
     line-height: 1.5;
+    font-size: 18px;
+    font-family: cursive;
 }
 .hero form {
     padding: 8px;
