@@ -28,7 +28,8 @@ const Home = () => {
       <div className="crypto-table">
         <div className="table-layout">
           <p>#</p>
-          <p>Coin</p>
+          <p>Symbol</p>
+          <p style={{ paddingLeft: 45 }}>Name</p>
           <p>Price</p>
           <p style={{ textAlign: "center" }}>24 Hr</p>
           <p className='market-cap'>Market Cap</p>
@@ -38,9 +39,10 @@ const Home = () => {
             <div className="table-layout" key={index}>
               <>
                 <p>{item.market_cap_rank}</p>
+                <p style={{ paddingLeft: 10 }}>{item.symbol?.toUpperCase()}</p>
                 <div>
                   <img src={item.image} alt="" />
-                  <p>{item.name + ' - ' + item.symbol}</p>
+                  <p>{item.name}</p>
                 </div>
                 <p>{currency.symbol} {item.current_price.toLocaleString()}</p>
                 <p className={item.price_change_percentage_24h>0 ? 'green' : 'red'}>
