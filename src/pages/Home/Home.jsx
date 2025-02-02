@@ -1,11 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react'
 import './Home.css'
 import { CoinContext } from '../../context/CoinContext'
+import { Link } from 'react-router-dom'
 
 const Home = () => {
 
   const {allCoin, currency} = useContext(CoinContext);
   const [displayCoin, setDisplayCoin] = useState([]);
+  const [input, setInput] = useState('');
+
+  const inputHandler = (event) => {
+    setInput(event.target.value);
+  }
+
+  const searchHandler = async (event) => {
+    event.preventDefault();
+    const coins = await allCoin.filter((item) => {
+      return item.name.toLowerCase().includes(input.toLowerCase());
+    })  
+    setDisplayCoin(coins);
+  }
 
   useEffect(() => {
     setDisplayCoin(allCoin);
@@ -20,8 +34,8 @@ const Home = () => {
           Give us Today our daily gains, and forgive us our losses, as we forgive those who short against us.
           And not lead us into margin call, but deliver us our tredies now untill forever.<br/> AMEN.
         </p>
-        <form>
-          <input type="text" placeholder='Search Crypto' />
+        <form onSubmit={searchHandler}>
+          <input onChange={inputHandler} value={input} type="text" placeholder='Search Crypto'/>
           <button type="submit">Search</button>
         </form>
       </div>
@@ -36,7 +50,7 @@ const Home = () => {
         </div>
         {
           displayCoin.slice(0, 10).map((item, index) => (
-            <div className="table-layout" key={index}>
+            <Link to={`/coin/${item.id}`} className="table-layout" key={index}>
               <>
                 <p>{item.market_cap_rank}</p>
                 <p style={{ paddingLeft: 10 }}>{item.symbol?.toUpperCase()}</p>
@@ -50,7 +64,7 @@ const Home = () => {
                 </p>
                 <p className='market-cap'>{currency.symbol} {item.market_cap.toLocaleString()}</p>
               </>
-             </div> 
+             </Link> 
           ))
         }
       </div>
