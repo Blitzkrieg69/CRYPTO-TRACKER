@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
-import './Home.css'
-import { CoinContext } from '../../context/CoinContext'
-import { Link } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react';
+import './Home.css';
+import { CoinContext } from '../../context/CoinContext';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
-
-  const {allCoin, currency} = useContext(CoinContext);
+  const { allCoin, currency } = useContext(CoinContext);
   const [displayCoin, setDisplayCoin] = useState([]);
   const [input, setInput] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,32 +12,45 @@ const Home = () => {
 
   const inputHandler = (event) => {
     setInput(event.target.value);
-  }
+  };
 
   const searchHandler = async (event) => {
     event.preventDefault();
-    const coins = await allCoin.filter((item) => {
-      const c= item.symbol.toLowerCase().includes(input.toLowerCase());
-      const n= item.name.toLowerCase().includes(input.toLowerCase());
+    const coins = allCoin ? allCoin.filter((item) => {
+      const c = item.symbol.toLowerCase().includes(input.toLowerCase());
+      const n = item.name.toLowerCase().includes(input.toLowerCase());
       return c || n;
-    })  
+    }) : [];
+
     setDisplayCoin(coins);
-    setCurrentPage(1); // Reset to first page after search
-  }
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
-    setDisplayCoin(allCoin);
-    setCurrentPage(1); // Reset to first page when allCoin changes
-  }, [allCoin])
+    if (allCoin) {
+      setDisplayCoin(allCoin);
+      setCurrentPage(1);
+    }
+  }, [allCoin]);
 
-  // Calculate indexes for current page
   const indexOfLastCoin = currentPage * coinsPerPage;
   const indexOfFirstCoin = indexOfLastCoin - coinsPerPage;
-  const currentCoins = displayCoin.slice(indexOfFirstCoin, indexOfLastCoin);
+  const currentCoins = displayCoin ? displayCoin.slice(indexOfFirstCoin, indexOfLastCoin) : [];
 
-  const totalPages = Math.ceil(displayCoin.length / coinsPerPage);
+  const totalPages = displayCoin ? Math.ceil(displayCoin.length / coinsPerPage) : 0;
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const formatPrice = (price) => {
+    if (price === undefined || price === null) {
+      return "N/A";
+    }
+    if (price < 0.001) {
+      return price.toFixed(6);
+    } else {
+      return price.toLocaleString();
+    }
+  };
 
   return (
     <div className='home'>
@@ -47,10 +59,10 @@ const Home = () => {
         <p>
           Thy greens run long, thy red be none, with crypto, as it is with options.
           Give us Today our daily gains, and forgive us our losses, as we forgive those who short against us.
-          And not lead us into margin call, but deliver us our tredies now untill forever.<br/> AMEN.
+          And not lead us into margin call, but deliver us our tredies now until forever.<br /> AMEN.
         </p>
         <form onSubmit={searchHandler}>
-          <input onChange={inputHandler} value={input} type="text" placeholder='Search Crypto'/>
+          <input onChange={inputHandler} value={input} type="text" placeholder='Search Crypto' />
           <button type="submit">Search</button>
         </form>
       </div>
@@ -63,37 +75,34 @@ const Home = () => {
           <p style={{ textAlign: "center" }}>24 Hr</p>
           <p className='market-cap'>Market Cap</p>
         </div>
-        {
-          currentCoins.map((item, index) => (
-            <Link to={`/coin/${item.id}`} className="table-layout" key={index}>
-              <>
-                <p>{item.market_cap_rank}</p>
-                <p style={{ paddingLeft: 10 }}>{item.symbol?.toUpperCase()}</p>
-                <div>
-                  <img src={item.image} alt="" />
-                  <p>{item.name}</p>
-                </div>
-                <p>{currency.symbol} {item.current_price.toLocaleString()}</p>
-                <p className={item.price_change_percentage_24h>0 ? 'green' : 'red'}>
-                  {Math.floor(item.price_change_percentage_24h*100)/100}
-                </p>
-                <p className='market-cap'>{currency.symbol} {item.market_cap.toLocaleString()}</p>
-              </>
-            </Link> 
-          ))
-        }
+        {currentCoins && currentCoins.length > 0 ? currentCoins.map((item, index) => (
+          <Link to={`/coin/${item.id}`} className="table-layout" key={index}>
+            <>
+              <p>{item.market_cap_rank}</p>
+              <p style={{ paddingLeft: 10 }}>{item.symbol?.toUpperCase()}</p>
+              <div>
+                <img src={item.image} alt={item.name} />
+                <p>{item.name}</p>
+              </div>
+              <p>{currency.symbol} {formatPrice(item.current_price)}</p>
+              <p className={item.price_change_percentage_24h > 0 ? 'green' : 'red'}>
+                {Math.floor(item.price_change_percentage_24h * 100) / 100}%
+              </p>
+              <p className='market-cap'>{currency.symbol} {formatPrice(item.market_cap)}</p>
+            </>
+          </Link>
+        )) : <p>Loading Coins...</p>}
       </div>
 
-      {/* Pagination */}
       <div className="pagination">
-        {Array.from({ length: totalPages }, (_, i) => (
+        {totalPages > 0 && Array.from({ length: totalPages }, (_, i) => (
           <button key={i} onClick={() => paginate(i + 1)} className={currentPage === i + 1 ? 'active' : ''}>
             {i + 1}
           </button>
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
