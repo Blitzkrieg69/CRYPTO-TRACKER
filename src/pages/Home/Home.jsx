@@ -18,7 +18,9 @@ const Home = () => {
   const searchHandler = async (event) => {
     event.preventDefault();
     const coins = await allCoin.filter((item) => {
-      return item.name.toLowerCase().includes(input.toLowerCase());
+      const c= item.symbol.toLowerCase().includes(input.toLowerCase());
+      const n= item.name.toLowerCase().includes(input.toLowerCase());
+      return c || n;
     })  
     setDisplayCoin(coins);
     setCurrentPage(1); // Reset to first page after search
