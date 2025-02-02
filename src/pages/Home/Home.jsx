@@ -18,7 +18,7 @@ const Home = () => {
         <p>
           Thy greens run long, thy red be none, with crypto, as it is with options.
           Give us Today our daily gains, and forgive us our losses, as we forgive those who short against us.
-          And not lead us into margin call, but deliver us our tredies now untill forever. AMEN.
+          And not lead us into margin call, but deliver us our tredies now untill forever.<br/> AMEN.
         </p>
         <form>
           <input type="text" placeholder='Search Crypto' />
@@ -30,7 +30,7 @@ const Home = () => {
           <p>#</p>
           <p>Symbol</p>
           <p style={{ paddingLeft: 45 }}>Name</p>
-          <p>Price</p>
+          <p style={{ paddingLeft: 20 }}>Price</p>
           <p style={{ textAlign: "center" }}>24 Hr</p>
           <p className='market-cap'>Market Cap</p>
         </div>
