@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Chart } from 'react-google-charts';
 
-const LineChart = ({ historicalData }) => {
+const LineChart = ({ historicalData, priceChange24h }) => {
     const [data, setData] = useState([['Date', 'Prices']]);
 
     useEffect(() => {
@@ -13,6 +13,9 @@ const LineChart = ({ historicalData }) => {
             setData(dataCopy);
         }
     }, [historicalData]);
+
+    // Determine the line color based on the 24h change
+    const lineColor = priceChange24h >= 0 ? 'rgb(25, 254, 0)' : 'rgb(255, 0, 0)';
 
     const options = {
         backgroundColor: '#000000',
@@ -31,7 +34,7 @@ const LineChart = ({ historicalData }) => {
         },
         lineWidth: 3,
         series: {
-            0: { color: 'rgb(25, 254, 0)' },
+            0: { color: lineColor }, // Dynamic line color
         },
         legend: 'none',
     };

@@ -1,27 +1,30 @@
-.spinner{
+.spinner {
     display: grid;
     place-self: center;
     min-height: 80vh;
 }
-.spin{
+
+.spin {
     width: 65px;
     height: 65px;
     place-self: center;
     border: 5px solid transparent;
-    border-top-color:rgb(25, 254, 0);
+    border-top-color: rgb(25, 254, 0);
     border-radius: 50%;
     animation: rotate 1s infinite;
 }
-@keyframes rotate{
-    100%{
+
+@keyframes rotate {
+    100% {
         transform: rotate(360deg);
     }
 }
 
-.coin{
-    padding: 0 20px;  
+.coin {
+    padding: 0 20px;
 }
-.coin-name{
+
+.coin-name {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -29,28 +32,40 @@
     margin: 100px auto;
     margin-bottom: 50px;
 }
-.coin-name img{
+
+.coin-name img {
     max-width: 250px;
 }
-.coin-name p b{
+
+.coin-name p b {
     font-size: 44px;
     font-weight: 500;
 }
 
-
-.coin-info{
+.coin-info {
     max-width: 600px;
     margin: 50px auto;
     display: flex;
     flex-direction: column;
 }
-.coin-info ul{
+
+.coin-info ul {
     display: flex;
     justify-content: space-between;
     padding: 10px 0;
-    border-bottom: 1px solid rgb(25, 254, 0) ;
+    border-bottom: 1px solid rgb(25, 254, 0);
     list-style: none;
 }
-.coin-info ul li:last-child{
-font-weight: 300;
+
+.coin-info ul li:last-child {
+    font-weight: 300;
+}
+
+/* Add these new styles for .green and .red */
+.green {
+    color: rgb(25, 254, 0); /* Green color for positive change */
+}
+
+.red {
+    color: rgb(255, 0, 0); /* Red color for negative change */
 }
