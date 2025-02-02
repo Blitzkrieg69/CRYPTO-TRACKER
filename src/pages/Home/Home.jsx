@@ -8,6 +8,8 @@ const Home = () => {
   const {allCoin, currency} = useContext(CoinContext);
   const [displayCoin, setDisplayCoin] = useState([]);
   const [input, setInput] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const coinsPerPage = 10;
 
   const inputHandler = (event) => {
     setInput(event.target.value);
@@ -19,11 +21,22 @@ const Home = () => {
       return item.name.toLowerCase().includes(input.toLowerCase());
     })  
     setDisplayCoin(coins);
+    setCurrentPage(1); // Reset to first page after search
   }
 
   useEffect(() => {
     setDisplayCoin(allCoin);
+    setCurrentPage(1); // Reset to first page when allCoin changes
   }, [allCoin])
+
+  // Calculate indexes for current page
+  const indexOfLastCoin = currentPage * coinsPerPage;
+  const indexOfFirstCoin = indexOfLastCoin - coinsPerPage;
+  const currentCoins = displayCoin.slice(indexOfFirstCoin, indexOfLastCoin);
+
+  const totalPages = Math.ceil(displayCoin.length / coinsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className='home'>
@@ -49,7 +62,7 @@ const Home = () => {
           <p className='market-cap'>Market Cap</p>
         </div>
         {
-          displayCoin.slice(0, 10).map((item, index) => (
+          currentCoins.map((item, index) => (
             <Link to={`/coin/${item.id}`} className="table-layout" key={index}>
               <>
                 <p>{item.market_cap_rank}</p>
@@ -64,9 +77,18 @@ const Home = () => {
                 </p>
                 <p className='market-cap'>{currency.symbol} {item.market_cap.toLocaleString()}</p>
               </>
-             </Link> 
+            </Link> 
           ))
         }
+      </div>
+
+      {/* Pagination */}
+      <div className="pagination">
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button key={i} onClick={() => paginate(i + 1)} className={currentPage === i + 1 ? 'active' : ''}>
+            {i + 1}
+          </button>
+        ))}
       </div>
     </div>
   )
