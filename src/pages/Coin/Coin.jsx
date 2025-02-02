@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import './Coin.css'; // Make sure this file exists
+import './Coin.css';
 import { useParams } from 'react-router-dom';
-import { CoinContext } from '../../context/CoinContext'; // Correct path
-import LineChart from '../../components/LineChart/LineChart'; // Correct path
+import { CoinContext } from '../../context/CoinContext';
+import LineChart from '../../components/LineChart/LineChart';
 
 const Coin = () => {
   const { coinId } = useParams();
@@ -13,7 +13,7 @@ const Coin = () => {
   const fetchCoinData = async () => {
     const options = {
       method: 'GET',
-      headers: { accept: 'application/json', 'x-cg-demo-api-key': 'CG-6bbAjv2CSLBA4zJMj1W2mrA2' }, // Your API Key
+      headers: { accept: 'application/json', 'x-cg-demo-api-key': 'CG-6bbAjv2CSLBA4zJMj1W2mrA2' }, 
     };
 
     try {
@@ -32,7 +32,7 @@ const Coin = () => {
   const fetchHistoricalData = async () => {
     const options = {
       method: 'GET',
-      headers: { accept: 'application/json', 'x-cg-demo-api-key': 'CG-6bbAjv2CSLBA4zJMj1W2mrA2' }, // Your API Key
+      headers: { accept: 'application/json', 'x-cg-demo-api-key': 'CG-6bbAjv2CSLBA4zJMj1W2mrA2' }, // Replace with your actual API key
     };
 
     try {
@@ -54,7 +54,7 @@ const Coin = () => {
   useEffect(() => {
     fetchCoinData();
     fetchHistoricalData();
-  }, [currency, coinId]); // Important: Add coinId
+  }, [currency, coinId]);
 
   const formatPrice = (price) => {
     if (price === undefined || price === null) {
@@ -68,6 +68,8 @@ const Coin = () => {
   };
 
   if (coinData && historicalData) {
+    const priceChange = coinData.market_data.price_change_percentage_24h;
+
     return (
       <div className="coin">
         <div className="coin-name">
@@ -81,45 +83,47 @@ const Coin = () => {
         <div className="coin-chart">
           <LineChart
             historicalData={historicalData}
-            priceChange24h={coinData.market_data.price_change_percentage_24h}
+            priceChange24h={priceChange}
           />
         </div>
 
         <div className="coin-info">
-          <ul>
-            <li>Rank</li>
-            <li>{coinData.market_cap_rank}</li>
-          </ul>
-          <ul>
-            <li>Price</li>
-            <li>
-              {currency.symbol} {formatPrice(coinData.market_data.current_price[currency.name])}
-            </li>
-          </ul>
-          <ul>
-            <li>Market Cap</li>
-            <li>
-              {currency.symbol} {coinData.market_data.market_cap[currency.name].toLocaleString()}
-            </li>
-          </ul>
-          <ul>
-            <li>24 Hour High</li>
-            <li>
-            {currency.symbol} {formatPrice(coinData.market_data.high_24h[currency.name])}
-            </li>
-          </ul>
-          <ul>
-            <li>24 Hour Low</li>
-            <li>
-            {currency.symbol} {formatPrice(coinData.market_data.low_24h[currency.name])}
-            </li>
-          </ul>
-          <ul>
-            <li>24 Hour Change</li>
-            <li className={coinData.market_data.price_change_percentage_24h >= 0 ? 'green' : 'red'}>
-              {coinData.market_data.price_change_percentage_24h.toFixed(2)}%
-            </li>
-          </ul>
+          <div className={priceChange >= 0 ? 'green-desc' : 'red-desc'}>
+            <ul>
+              <li>Rank</li>
+              <li>{coinData.market_cap_rank}</li>
+            </ul>
+            <ul>
+              <li>Price</li>
+              <li>
+                {currency.symbol} {formatPrice(coinData.market_data.current_price[currency.name])}
+              </li>
+            </ul>
+            <ul>
+              <li>Market Cap</li>
+              <li>
+                {currency.symbol} {coinData.market_data.market_cap[currency.name].toLocaleString()}
+              </li>
+            </ul>
+            <ul>
+              <li>24 Hour High</li>
+              <li>
+                {currency.symbol} {formatPrice(coinData.market_data.high_24h[currency.name])}
+              </li>
+            </ul>
+            <ul>
+              <li>24 Hour Low</li>
+              <li>
+                {currency.symbol} {formatPrice(coinData.market_data.low_24h[currency.name])}
+              </li>
+            </ul>
+            <ul>
+              <li>24 Hour Change</li>
+              <li className={priceChange >= 0 ? 'green' : 'red'}>
+                {priceChange ? priceChange.toFixed(2) : "N/A"}%
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     );
